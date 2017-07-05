@@ -1,8 +1,15 @@
-
+.sideChat {
+  width:300px;
+}
 
 .card-block { 
   padding: 0px;
-  
+}
+
+.list-group-item {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  font-size: 12px;
 }
 
 .card-header { 
@@ -105,8 +112,8 @@ input {
 
 #chat {
   position: fixed;
-  width:100%;
   bottom: 10px;
+  width:300px;
 }
 
 #tester {
@@ -114,4 +121,9 @@ input {
   background-color: green;
 }
 
+.userAvatar {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+}
 

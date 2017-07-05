@@ -19,11 +19,14 @@ module.exports = (io) => {
         userInfoMap[socket.id]['userEmail'] = userEmail;
 
         if (sessionIdList[sessionId]) {
-            
+            if (sessionIdList[sessionId]['delta']) {
+                socket.emit('serverSendEditorChangesHistory', JSON.stringify(sessionIdList[sessionId]['delta']));
+            }
         }
         else {
             sessionIdList[sessionId] = {
-                users:[]
+                users:[],
+                delta:[]
             };
         }
 
@@ -35,11 +38,18 @@ module.exports = (io) => {
         
         let allUsers = sessionIdList[sessionId]['users'];
         
+        let userListAry = [];
+        for (let i = 0; i < allUsers.length; i++) {
+            userListAry.push(userInfoMap[allUsers[i]]);
+        }
+
+
+
         for (let i = 0; i < allUsers.length; i++) {
             console.log('[v] Send UserList to: '+allUsers[i] + ' - Broadcasting');
-            io.to(allUsers[i]).emit('serverSendUsersList',JSON.stringify(sessionIdList[sessionId]['users']);
-        }        
-
+            io.to(allUsers[i]).emit('serverSendUsersList',JSON.stringify(userListAry));
+        }       
+        delete userListAry;
 
 
 
@@ -65,6 +75,27 @@ module.exports = (io) => {
         });
 
 
+        socket.on('clientSendEditorChanges', (delta) => {
+            let session = userInfoMap[socket.id].sessionId;
+            console.log('[+] Receive Editor-Delta: '+delta+'\n    from: ' + socket.id);
+            if (sessionIdList[session]) {
+
+                sessionIdList[session]['delta'].push(delta);
+
+                allUsers = sessionIdList[session]['users'];
+                for (let i = 0; i < allUsers.length; i++) {
+                    if (socket.id !== allUsers[i] ) {
+                        console.log('[v] Send Delta to: '+allUsers[i]);
+                        io.to(allUsers[i]).emit('severSendEditorChanges',delta);              
+                    }
+                }
+            }
+            else {
+                console.log('[!] ERROR: ' + socket.id + ' is not in session:' + session);
+            }
+        });
+
+
         // Disconnect
         socket.on('disconnect',()=>{
             console.log(`[*] User:${userName}(${socket.id}) requests to disconnect.`);
@@ -83,6 +114,23 @@ module.exports = (io) => {
                     if (sessionIdList[session].users.length===0) {
                         delete sessionIdList[session];
                         console.log(`[-] Session: ${session} has been removed from server.`);
+                    } 
+                    else {
+
+                        // Update user list to all users in the same session
+        
+                        let allUsers = sessionIdList[sessionId]['users'];
+                        
+                        let userListAry = [];
+                        for (let i = 0; i < allUsers.length; i++) {
+                            userListAry.push(userInfoMap[allUsers[i]]);
+                        }
+
+                        for (let i = 0; i < allUsers.length; i++) {
+                            console.log('[v] Re-Send UserList to: '+allUsers[i] + ' - Broadcasting');
+                            io.to(allUsers[i]).emit('serverSendUsersList',JSON.stringify(userListAry));
+                        }       
+                        delete userListAry;
                     }
                 }
             }

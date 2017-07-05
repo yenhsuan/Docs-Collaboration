@@ -14,12 +14,15 @@ export class ChatComponent implements OnInit {
   chatHistory: Array<object> = [];
   chatNewMsgSubscribed: Subscription;
 
+  chatUserList: Array<object> = [];
+  chatUserListSubscribed: Subscription;
+
   constructor(@Inject('socket') private socket) {
 
   }
 
   ngOnInit() {
-    this.socket.socketInit('1', 'Guest', this.userId + '@test.com');
+    this.socket.socketInit('1', 'Guest' + Math.floor((Math.random() * 100000) + 1), this.userId + '@test.com');
     this.chatNewMsgSubscribed = this.socket.subscribeNewChatMsg()
       .subscribe( (newMsg: string) => {
         if (newMsg) {
@@ -28,13 +31,18 @@ export class ChatComponent implements OnInit {
             user: msg['user'],
             text: msg['text']
           });
-          console.log('received');
+          // console.log('msg received');
         }
+      });
 
+    this.chatUserListSubscribed = this.socket.subscribeUserList()
+      .subscribe( (userList: string) => {
+        if (userList) {
+          const users = JSON.parse(userList);
+          this.chatUserList = users;
+        }
       });
   }
-
-
 
   sendMsg(): void {
     if (this.message !== '' && this.userId !== '') {
@@ -42,3 +50,4 @@ export class ChatComponent implements OnInit {
     }
   }
 }
+//

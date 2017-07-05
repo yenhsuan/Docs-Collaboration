@@ -1,13 +1,13 @@
-
-<div id='userList'>
+  <div class="sideChat">
   <ul class="list-group">
-    <li class="list-group-item">Cras justo odio</li>
-    <li class="list-group-item">Dapibus ac facilisis in</li>
-    <li class="list-group-item">Morbi leo risus</li>
-    <li class="list-group-item">Porta ac consectetur ac</li>
-    <li class="list-group-item">Vestibulum at eros</li>
+    <li class="list-group-item" *ngFor="let userInfo of chatUserList">
+
+    <img class="userAvatar rounded-circle" src = "http://www.expertosenecommerce.com/wp-content/uploads/2016/04/icon-user-default.jpg"> 
+    {{userInfo.userName}}
+    <div class="ml-auto"><i class="fa fa-envelope-open-o" aria-hidden="true"></i></div>
+    </li>
   </ul>
-</div>
+
 
 <div id="chat" class="card">
   <div class="chat-panel">
@@ -48,5 +48,7 @@
   </div>
 </div>
 
+
+</div>
 
 

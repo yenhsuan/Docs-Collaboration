@@ -7,11 +7,14 @@ declare const io: any;
 export class SocketService {
 
   socket: any;
-
+  editRef: any;
   userNum = 0;
   users: Object = {};
   sessionId = new BehaviorSubject<string>('public');
   chatMsgReceived = new BehaviorSubject<string>('');
+  userListReceived = new BehaviorSubject<string>('');
+
+  test_Socketinit = false;
 
   constructor() { }
 
@@ -20,28 +23,35 @@ export class SocketService {
   }
 
   socketInit(sessionId: string, userId: string, userEmail: string) {
-    console.log(window.location.origin);
-    this.socket = io('localhost:3000', {query: `sessionId=${sessionId}&userName=${userId}&userEmail=${userEmail}`});
-    console.log('[*] socketInit... done');
-    this.socketListenChat();
+    if ( this.test_Socketinit === false ) {
+      this.test_Socketinit = true;
+      console.log(window.location.origin);
+      this.socket = io('localhost:3000', {query: `sessionId=${sessionId}&userName=${userId}&userEmail=${userEmail}`});
+      console.log('[*] socketInit... done');
+      this.socketListenChat();
+      this.socketListenUserList();
+    }
   }
 
   subscribeNewChatMsg(): Observable<string> {
     return this.chatMsgReceived.asObservable();
   }
 
-  socketListenUserList(): void {
-    this.socket.on('serverSendUsersList', (userListString) => {
-      console.log('[v] Socket received: ' + userListString);
-      // Todo: Subscribe
-    });
+  subscribeUserList(): Observable<string> {
+    return this.userListReceived.asObservable();
   }
 
 
+  socketListenUserList(): void {
+    this.socket.on('serverSendUsersList', (userListString) => {
+      console.log('[v] UserList received: ' + userListString);
+      this.userListReceived.next(userListString);
+    });
+  }
 
   socketListenChat(): void {
     this.socket.on('serverSendChatMsg', (msg: string) => {
-      console.log('[v] Socket received: ' + msg);
+      console.log('[v] Message received: ' + msg);
       this.chatMsgReceived.next(msg);
     });
   }
@@ -54,6 +64,33 @@ export class SocketService {
 
     this.socket.emit('clientSendChatMsg', JSON.stringify(msgObj));
   }
+
+  socketSendEditorChanges(delta: any) {
+    this.socket.emit('clientSendEditorChanges', JSON.stringify(delta));
+  }
+
+  socketListenEditorChanges(editor: any): void {
+    this.socket.on('severSendEditorChanges', (delta: string) => {
+      console.log('[v] UserList received: ');
+      console.log(delta);
+      editor.updateContents(JSON.parse(delta));
+    });
+  }
+
+  socketListenEditorChangesHistory(editor: any): void {
+    this.socket.on('serverSendEditorChangesHistory', (deltaAryStr: string) => {
+      if (deltaAryStr) {
+        const deltaAry: Array<string> = JSON.parse(deltaAryStr);
+        console.log('[v] EditorChangesHistory received: \n' + deltaAryStr);
+
+
+        for (let i = 0; i < deltaAry.length; i++) {
+          editor.updateContents(JSON.parse(deltaAry[i]));
+        }
+      }
+    });
+  }
+
 
 
   disconnect(): void {
