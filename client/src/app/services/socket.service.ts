@@ -22,15 +22,36 @@ export class SocketService {
     return this.sessionId.asObservable();
   }
 
-  socketInit(sessionId: string, userId: string, userEmail: string) {
-    if ( this.test_Socketinit === false ) {
-      this.test_Socketinit = true;
-      console.log(window.location.origin);
-      this.socket = io('localhost:3000', {query: `sessionId=${sessionId}&userName=${userId}&userEmail=${userEmail}`});
-      console.log('[*] socketInit... done');
-      this.socketListenChat();
-      this.socketListenUserList();
-    }
+  // socketInit(sessionId: string, userId: string, userEmail: string) {
+  //   if ( this.test_Socketinit === false ) {
+  //     this.test_Socketinit = true;
+  //     console.log(window.location.origin);
+  //     this.socket = io('localhost:3000', {query: `sessionId=${sessionId}&userName=${userId}&userEmail=${userEmail}`});
+  //     console.log('[*] socketInit... done');
+  //     this.socketListenChat();
+  //     this.socketListenUserList();
+  //   }
+  // }
+
+
+  socketInit(userId: string, userEmail: string, userPic: string) {
+    console.log(window.location.origin);
+    this.socket = io('localhost:3000', {query: `userName=${userId}&userEmail=${userEmail}&userPic=${userPic}`});
+    console.log('[*] socketInit... done');
+    this.socketListenChat();
+    this.socketListenUserList();
+  }
+
+  socketCreateDoc(sessionId: string): void {
+    const payload = {
+      sessionId: sessionId
+    };
+    this.socket.emit('clientCreateSession', JSON.stringify(payload));
+  }
+
+  socketJoinSession(sessionId: string): void {
+    this.socket.emit('clientJoinSession', sessionId);
+
   }
 
   subscribeNewChatMsg(): Observable<string> {

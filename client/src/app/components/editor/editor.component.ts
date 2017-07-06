@@ -21,8 +21,9 @@ export class EditorComponent implements OnInit {
       placeholder: 'Compose an epic...',
       theme: 'snow'
     });
-    this.socket.socketInit('1', 'Guest' + Math.floor((Math.random() * 100000) + 1), 'Guest@test.com');
-    this.editorListenEvents();
+    // this.socket.socketInit('1', 'Guest' + Math.floor((Math.random() * 100000) + 1), 'Guest@test.com');
+    
+    // this.editorListenEvents();
 
   }
 

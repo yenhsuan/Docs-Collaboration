@@ -22,7 +22,7 @@ export class ChatComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.socket.socketInit('1', 'Guest' + Math.floor((Math.random() * 100000) + 1), this.userId + '@test.com');
+    // this.socket.socketInit('1', 'Guest' + Math.floor((Math.random() * 100000) + 1), this.userId + '@test.com');
     this.chatNewMsgSubscribed = this.socket.subscribeNewChatMsg()
       .subscribe( (newMsg: string) => {
         if (newMsg) {
