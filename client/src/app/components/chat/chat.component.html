@@ -1,0 +1,54 @@
+  <div class="sideChat">
+  <ul class="list-group">
+    <li class="list-group-item" *ngFor="let userInfo of chatUserList">
+
+    <img class="userAvatar rounded-circle" src = "http://www.expertosenecommerce.com/wp-content/uploads/2016/04/icon-user-default.jpg"> 
+    {{userInfo.userName}}
+    <div class="ml-auto"><i class="fa fa-envelope-open-o" aria-hidden="true"></i></div>
+    </li>
+  </ul>
+
+
+<div id="chat" class="card">
+  <div class="chat-panel">
+  <div class="card-header card-primary card-inverse">Chat Panel</div>
+  <div class="card-block">
+    <div #msg class="t" [scrollTop]="msg.scrollHeight">
+        <div  *ngFor="let chatMsg of chatHistory"  >
+            <div class="row" *ngIf="chatMsg.user != userId">
+                    <div class="msgText" >
+                        <div class="text-muted">{{chatMsg.user}} :</div>
+                        {{chatMsg.text}}
+                    </div>
+            </div>
+            
+            <div class="row justify-content-end" *ngIf="chatMsg.user == userId">
+                    <div class="msgText-me float-right" >
+                        {{chatMsg.text}}
+                    </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer">
+        <div class = "row">
+            <div class="input-group col-4">
+            <div class="input-group-addon form-control-sm ">User</div>
+             <input type="text" class="form-control form-control-sm user" [(ngModel)]="userId">
+            </div>
+
+             <div class="input-group col-8">
+              <input type="text" class="form-control form-control-sm" [(ngModel)]="message">
+              <span class="input-group-btn">
+                <button class="btn btn-primary btn-sm" type="button" (click)="sendMsg()">Send</button>
+              </span>
+            </div>
+            </div>
+        </div>
+  </div>
+  </div>
+</div>
+
+
+</div>
+
+
