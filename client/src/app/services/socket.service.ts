@@ -10,47 +10,41 @@ export class SocketService {
   editRef: any;
   userNum = 0;
   users: Object = {};
-  sessionId = new BehaviorSubject<string>('public');
+
+  userName: string;
+  userEmail: string;
+  userPic: string;
+
+  sessionId: string;
   chatMsgReceived = new BehaviorSubject<string>('');
   userListReceived = new BehaviorSubject<string>('');
+
+  userMode = '';
 
   test_Socketinit = false;
 
   constructor() { }
 
-  getSessionId() {
-    return this.sessionId.asObservable();
-  }
+  socketInit() {
+    // console.log(window.location.origin);
+    if (this.userName) {
+      this.socket = io('localhost:3000', {query: `userName=${this.userName}&userEmail=${this.userEmail}&userPic=${this.userPic}`});
+      this.socketListenChat();
+      this.socketListenUserList();
 
-  // socketInit(sessionId: string, userId: string, userEmail: string) {
-  //   if ( this.test_Socketinit === false ) {
-  //     this.test_Socketinit = true;
-  //     console.log(window.location.origin);
-  //     this.socket = io('localhost:3000', {query: `sessionId=${sessionId}&userName=${userId}&userEmail=${userEmail}`});
-  //     console.log('[*] socketInit... done');
-  //     this.socketListenChat();
-  //     this.socketListenUserList();
-  //   }
-  // }
-
-
-  socketInit(userId: string, userEmail: string, userPic: string) {
-    console.log(window.location.origin);
-    this.socket = io('localhost:3000', {query: `userName=${userId}&userEmail=${userEmail}&userPic=${userPic}`});
+    }
     console.log('[*] socketInit... done');
-    this.socketListenChat();
-    this.socketListenUserList();
   }
 
-  socketCreateDoc(sessionId: string): void {
+  socketCreateDoc(): void {
     const payload = {
-      sessionId: sessionId
+      sessionId: this.sessionId
     };
     this.socket.emit('clientCreateSession', JSON.stringify(payload));
   }
 
-  socketJoinSession(sessionId: string): void {
-    this.socket.emit('clientJoinSession', sessionId);
+  socketJoinSession(): void {
+    this.socket.emit('clientJoinSession', this.sessionId);
 
   }
 
@@ -77,9 +71,9 @@ export class SocketService {
     });
   }
 
-  socketSendMsgChat(msg: string, userId: string): void {
+  socketSendMsgChat(msg: string): void {
     const msgObj: object = {
-      user: userId,
+      user: this.userName,
       text: msg
     };
 
@@ -99,22 +93,56 @@ export class SocketService {
   }
 
   socketListenEditorChangesHistory(editor: any): void {
-    this.socket.on('serverSendEditorChangesHistory', (deltaAryStr: string) => {
+    this.socket.on('serverSendSessionContent', (deltaAryStr: string) => {
       if (deltaAryStr) {
         const deltaAry: Array<string> = JSON.parse(deltaAryStr);
-        console.log('[v] EditorChangesHistory received: \n' + deltaAryStr);
+        console.log('[v] EditorChangesHistory received: \n');
+        console.log(deltaAry);
 
 
-        for (let i = 0; i < deltaAry.length; i++) {
-          editor.updateContents(JSON.parse(deltaAry[i]));
+        for (let i = 0; i < deltaAry['delta'].length; i++) {
+          editor.updateContents(JSON.parse(deltaAry['delta'][i]));
         }
       }
     });
   }
 
-
-
   disconnect(): void {
     this.socket.disconnect();
+  }
+
+
+  // Instance mutators & accessors
+  getUserName(): string {
+    return this.userName;
+  }
+
+  getUserPic(): string {
+    return this.userPic;
+  }
+
+  getUserEmail(): string {
+    return this.userEmail;
+  }
+
+  setUserName(input: string): void {
+    this.userName = input;
+  }
+
+  setUserEmail(input: string): void {
+    this.userEmail = input;
+  }
+
+  setUserPic(input: string): void {
+    this.userPic = input;
+  }
+
+  setSessionId(input: string): void {
+    this.sessionId = input;
+  }
+
+
+  getSessionId() {
+    return this.sessionId;
   }
 }

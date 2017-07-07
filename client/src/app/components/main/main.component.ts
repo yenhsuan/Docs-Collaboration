@@ -1,4 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-main',
@@ -7,29 +8,21 @@ import { Component, OnInit, Inject } from '@angular/core';
 })
 export class MainComponent implements OnInit {
 
-  constructor(@Inject('auth') private auth, @Inject('socket') private socket) { }
+  constructor(@Inject('auth') private auth, @Inject('socket') private socket, private router: Router) { }
 
   ngOnInit() {
-  }
 
-  login(): void {
-    this.auth.login()
-      .then( (profile: any) => {
-        console.log('Auth-callback:');
-        console.log(profile);
-        const userName = profile.username;
-        const userEmail = profile.email;
-        const userPic = profile.picture;
-        this.socket.socketInit(userName, userEmail, userPic);
-      });
-  }
+    if (this.socket.userMode === '') {
+      this.router.navigate(['/start']);
+    } else {
 
-  createNewDoc(): void {
-    this.socket.socketCreateDoc('zzzzzzzzzzz');
-  }
+      this.socket.socketInit();
+      if ( this.socket.userMode === 'create') {
+        this.socket.socketCreateDoc();
+      } else {
+        this.socket.socketJoinSession();
+      }
 
-  joinSession(): void {
-    this.socket.socketJoinSession('zzzzzzzzzzz');
+    }
   }
-
 }

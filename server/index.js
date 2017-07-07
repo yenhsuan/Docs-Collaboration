@@ -6,6 +6,13 @@ app.get('/', (req,res)=>{
     res.send('Server on...');
 });
 
+let router = require('./routes/restapi.js');
+
+// app.use(express.static(path.join(__dirname, '../public')))
+//app.use('/',home);
+
+app.use('/api/v1',router);
+
 
 
 // WebSocket (Socket.io) Setup

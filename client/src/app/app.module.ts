@@ -12,18 +12,22 @@ import { EditorComponent } from './components/editor/editor.component';
 import { SocketService } from './services/socket.service';
 import { DocsService } from './services/docs.service';
 import { AuthService } from './services/auth.service';
+import { StartComponent } from './components/start/start.component';
+import { routing } from './app.routes';
 
 @NgModule({
   declarations: [
     AppComponent,
     ChatComponent,
     MainComponent,
-    EditorComponent
+    EditorComponent,
+    StartComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
-    HttpModule
+    HttpModule,
+    routing
   ],
   providers: [
     {

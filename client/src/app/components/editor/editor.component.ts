@@ -21,13 +21,13 @@ export class EditorComponent implements OnInit {
       placeholder: 'Compose an epic...',
       theme: 'snow'
     });
-    // this.socket.socketInit('1', 'Guest' + Math.floor((Math.random() * 100000) + 1), 'Guest@test.com');
-    
-    // this.editorListenEvents();
 
+    if (this.socket.userMode) {
+      this.editorEventsActivate();
+    }
   }
 
-  editorListenEvents(): void {
+  editorEventsActivate(): void {
 
     this.quill.on('text-change', (delta: any, oldDelta: any, source: any) => {
       if (source === 'api') {

@@ -171,8 +171,8 @@ module.exports = (io) => {
                     else {
 
                         // Update user list to all users in the same session
-                        if (sessionId) {
-                            let allUsers = sessionIdList[sessionId]['users'];
+                        if (session) {
+                            let allUsers = sessionIdList[session]['users'];
                             
                             let userListAry = [];
                             for (let i = 0; i < allUsers.length; i++) {
