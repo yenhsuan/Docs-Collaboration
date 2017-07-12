@@ -37,6 +37,10 @@ testem.log
 /e2e/*.js
 /e2e/*.map
 
+# static files
+/public
+
+
 # System Files
 .DS_Store
 Thumbs.db

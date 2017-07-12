@@ -11,7 +11,7 @@ export class DocsService {
 
   getDocContent(id: string): Promise<any> {
 
-    return this.httpObj.get(`http://localhost:3000/api/v1/file/${id}`)
+    return this.httpObj.get(`http://localhost:5566/api/v1/file/${id}`)
             .toPromise()
             .then( (response: Response) => response.json())
             .catch(this.handleError);
@@ -19,7 +19,7 @@ export class DocsService {
 
   getDoc(uid: string): Promise<any> {
 
-    return this.httpObj.get(`http://localhost:3000/api/v1/filelist/${uid}`)
+    return this.httpObj.get(`http://localhost:5566/api/v1/filelist/${uid}`)
             .toPromise()
             .then( (response: Response) => response.json())
             .catch(this.handleError);
@@ -33,7 +33,7 @@ export class DocsService {
     });
 
 
-    return this.httpObj.post('http://localhost:3000/api/v1/savefile', content, header)
+    return this.httpObj.post('http://localhost:5566/api/v1/savefile', content, header)
               .toPromise()
               .then( (response: Response) => {
                 console.log(response.json());
@@ -44,7 +44,7 @@ export class DocsService {
 
   deleteDoc(uid: string, name: string): Promise<any> {
 
-    return this.httpObj.delete(`http://localhost:3000/api/v1/deletefile/${uid}/${name}`)
+    return this.httpObj.delete(`http://localhost:5566/api/v1/deletefile/${uid}/${name}`)
               .toPromise()
               .then( (response: Response) => {
                 console.log(response.json());
