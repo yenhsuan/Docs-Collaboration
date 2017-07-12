@@ -12,10 +12,10 @@
         <a class="nav-link" [routerLink]="['/about']">About</a>
       </li>
     </ul>
-    <ul class="navbar-nav ml-auto" *ngIf="authenticated()">
+    <ul class="navbar-nav ml-auto" *ngIf="auth.authenticated()">
       <li class="nav-link" >{{getUsername()}}({{getUsermail()}}) </li>
     </ul>
-      <button class="btn btn-blue" *ngIf="!authenticated()" (click)="login()">Sign in</button>
-      <button class="btn btn-info" *ngIf="authenticated()" (click)="logout()">Logout</button>
+      <button class="btn btn-blue" *ngIf="!auth.authenticated()" (click)="login()">Sign in</button>
+      <button class="btn btn-info" *ngIf="auth.authenticated()" (click)="logout()">Logout</button>
   </div>
 </nav>

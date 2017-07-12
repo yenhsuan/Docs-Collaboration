@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import { tokenNotExpired } from 'angular2-jwt';
-// import { Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs/Rx';
 import { Http, Response, Headers} from '@angular/http';
 
@@ -39,38 +39,48 @@ export class AuthService {
   lock = new Auth0Lock(this.clientId, this.domain, options);
   profile: any;
   accessToken = '';
+  loadingProfile = false;
 
   // nickname = new BehaviorSubject<string>('');
 
   // constructor(private router: Router, private http: Http) {
   // }
 
-  constructor(private http: Http) {
+  constructor(@Inject('socket') private socket, private http: Http, private router: Router) {
+    this.lock.on('authenticated', authResult => {
+      this.loadingProfile = true;
+      this.lock.getUserInfo( authResult.accessToken, (error, profile) => {
+          this.loadingProfile = false;
+          if (error) {
+            console.log(error);
+            return;
+          }
+          localStorage.setItem('accessToken', authResult.accessToken);
+          localStorage.setItem('id_token', authResult.idToken);
+          this.accessToken = authResult.accessToken;
+          localStorage.setItem('profile', JSON.stringify(profile));
+          this.profile = profile;
+          // console.log('here');
+          // resolve(profile);
+          // this.router.navigate(['/ugihuih']);
+
+          const userName = profile.username;
+          const userEmail = profile.email;
+          const userPic = profile.picture;
+
+          this.socket.setUserName(userName);
+          this.socket.setUserEmail(userEmail);
+          this.socket.setUserPic(userPic);
+
+          this.router.navigate(['/start']);
+          setTimeout( () => {this.lock.hide()}, 1300) ;
+
+       });
+      });
   }
 
   public login() {
-
-    return new Promise( (resolve, reject) => {
-      this.lock.on('authenticated', authResult => {
-        this.lock.getUserInfo( authResult.accessToken, (error, profile) => {
-            if (error) {
-              console.log(error);
-              return;
-            }
-            localStorage.setItem('accessToken', authResult.accessToken);
-            localStorage.setItem('id_token', authResult.idToken);
-            this.accessToken = authResult.accessToken;
-            localStorage.setItem('profile', JSON.stringify(profile));
-            this.profile = profile;
-            // console.log('here');
-            resolve(profile);
-            // this.router.navigate(['/ugihuih']);
-            setTimeout( () => {this.lock.hide()}, 1300) ;
-
-         });
-        });
-     this.lock.show();
-    });
+   this.lock.show();
   }
 
 
@@ -83,8 +93,9 @@ export class AuthService {
 
   public reloadProfile() {
     const accessToken: string = localStorage.getItem('accessToken');
-    return new Promise ( (resolve, reject) => {
+    this.loadingProfile = true;
       this.lock.getUserInfo( accessToken, (error, profile) => {
+        this.loadingProfile = false;
         if (error) {
           console.log(error);
           return;
@@ -92,20 +103,26 @@ export class AuthService {
         localStorage.setItem('profile', JSON.stringify(profile));
         this.profile = profile;
 
+        const userName = profile.username;
+        const userEmail = profile.email;
+        const userPic = profile.picture;
+
+        this.socket.setUserName(userName);
+        this.socket.setUserEmail(userEmail);
+        this.socket.setUserPic(userPic);
         // console.log('here');
-        resolve(profile);
         // this.router.navigate(['/ugihuih']);
      });
-    });
   }
 
   public logout() {
     // Remove token from localStorage
+    this.profile = {};
     localStorage.removeItem('accessToken');
     localStorage.removeItem('profile');
     // localStorage.removeItem('expires_at');
     localStorage.removeItem('id_token')
-    // this.router.navigate(['/']);
+    this.router.navigate(['/']);
   }
 
   public getProfile(): Object {

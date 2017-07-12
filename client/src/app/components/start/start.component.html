@@ -1,6 +1,6 @@
 <div id="xx" class="container">
     
-    <div class="loader loader-div " *ngIf="loading">Loading...</div>
+    <div class="loader loader-div " *ngIf="auth.loadingProfile">Loading...</div>
     <div class="row">
       <div class="col-md-5 hidden-sm-down full">
         <img class="mid" src="../../assets/Docs.png">
@@ -12,16 +12,16 @@
         <h2>All in one place.</h2><br>
         <h6 class="text-info">Demo Account1: <i class="fa fa-user-circle" aria-hidden="true"></i> test  <i class="fa fa-key" aria-hidden="true"></i> test</h6>
         <h6 class="text-info">Demo Account2: <i class="fa fa-user-circle" aria-hidden="true"></i> demo  <i class="fa fa-key" aria-hidden="true"></i> demo</h6>
-        <div class="row justify-content-md-center align-items-center start-btn" *ngIf="!authenticated()">
-            <button class = "btn btn-primary" (click)="login()">Sign up</button><br />
+        <div class="row justify-content-md-center align-items-center start-btn" *ngIf="!auth.authenticated()">
+            <button class = "btn btn-primary" (click)="login()">Try it!</button><br />
         </div>
 
-        <div class="row start-btn" *ngIf="!loading">
-            <button class = "btn btn-success btnn" (click)="createNewDoc()" *ngIf="authenticated()">Create doc</button><br />
+        <div class="row start-btn" [hidden]="!auth.authenticated()" >
+            <button class = "btn btn-success btnn" (click)="createNewDoc()" [hidden]="!auth.profile">Create doc</button><br />
         </div>
         
-        <div class="row start-btn" *ngIf="!loading">
-            <button class = "btn btn-warning btnn" data-toggle="modal" data-target="#joinPanel" *ngIf="authenticated()">Join session</button>
+        <div class="row start-btn" [hidden]="!auth.authenticated()">
+            <button class = "btn btn-warning btnn" data-toggle="modal" data-target="#joinPanel" [hidden]="!auth.profile">Join session</button>
         </div>
       </div>
     </div>

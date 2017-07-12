@@ -18,15 +18,12 @@ export class NavComponent implements OnInit {
   }
 
   login(): void {
-    this.auth.login()
-      .then( (profile) => {
-        this.router.navigate(['/start']);
-      });
+    this.auth.login();
   }
 
   logout(): void {
     this.auth.logout();
-    this.router.navigate(['/start']);
+    // this.router.navigate(['/start']);
   }
 
   getUsername(): string {

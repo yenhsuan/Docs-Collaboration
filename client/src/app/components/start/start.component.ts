@@ -9,13 +9,11 @@ import sha512 from 'js-sha512';
   styleUrls: ['./start.component.css']
 })
 export class StartComponent implements OnInit {
-  loading = true;
   sessionCode = '';
   constructor(@Inject('auth') private auth, @Inject('socket') private socket, private router: Router) { }
 
 
   ngOnInit() {
-
     // Init socket service
     if (!this.auth.authenticated()) {
       this.socket.setUserName('');
@@ -24,42 +22,29 @@ export class StartComponent implements OnInit {
     }
 
     if ( this.auth.authenticated()) {
-      this.auth.reloadProfile()
-        .then( (profile: any) => {
-          const userName = profile.username;
-          const userEmail = profile.email;
-          const userPic = profile.picture;
-
-          this.socket.setUserName(userName);
-          this.socket.setUserEmail(userEmail);
-          this.socket.setUserPic(userPic);
-          this.loading = false;
-        });
-    } else {
-      this.loading = false;
+      this.auth.reloadProfile();
     }
-
-
   }
 
-  authenticated() {
-    return this.auth.authenticated();
-  }
+
 
 
   login(): void {
-  this.auth.login()
-    .then( (profile: any) => {
-      console.log('Auth-callback:');
-      console.log(profile);
-      const userName = profile.username;
-      const userEmail = profile.email;
-      const userPic = profile.picture;
+    this.auth.login();
+      // .then( (profile: any) => {
+      //   console.log('Auth-callback:');
+      //   console.log(profile);
+      //   const userName = profile.username;
+      //   const userEmail = profile.email;
+      //   const userPic = profile.picture;
 
-      this.socket.setUserName(userName);
-      this.socket.setUserEmail(userEmail);
-      this.socket.setUserPic(userPic);
-    });
+      //   this.socket.setUserName(userName);
+      //   this.socket.setUserEmail(userEmail);
+      //   this.socket.setUserPic(userPic);
+      //   this.profileRead = true;
+      //   this.loading = false;
+        // this.router.navigate(['/']);
+      // });
   }
 
 
