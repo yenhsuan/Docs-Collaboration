@@ -1,53 +1,124 @@
 <!-- Create toolbar container -->
-<div id="toolbar-container">
-<span class="ql-formats">
-<select class="ql-font"></select>
-<select class="ql-size"></select>
-</span>
-<span class="ql-formats">
-<button class="ql-bold"></button>
-<button class="ql-italic"></button>
-<button class="ql-underline"></button>
-<button class="ql-strike"></button>
-</span>
-<span class="ql-formats">
-<select class="ql-color"></select>
-<select class="ql-background"></select>
-</span>
-<span class="ql-formats">
-<button class="ql-script" value="sub"></button>
-<button class="ql-script" value="super"></button>
-</span>
-<span class="ql-formats">
-<button class="ql-header" value="1"></button>
-<button class="ql-header" value="2"></button>
-<button class="ql-blockquote"></button>
 
-</span>
-<span class="ql-formats">
-<button class="ql-list" value="ordered"></button>
-<button class="ql-list" value="bullet"></button>
-<button class="ql-indent" value="-1"></button>
-<button class="ql-indent" value="+1"></button>
-</span>
-<span class="ql-formats">
-<button class="ql-direction" value="rtl"></button>
-<select class="ql-align"></select>
-</span>
-<span class="ql-formats">
-<button class="ql-link"></button>
-<button class="ql-image"></button>
-<button class="ql-video"></button>
+<div class="loader loader-div" *ngIf="loading">Loading...</div>
+<div class="loader loader-div" *ngIf="loadingList">Loading...</div>
 
-</span>
-<span class="ql-formats">
-<button class="ql-clean"></button>
-</span>
+<div class="row" [ngClass]="{'notDisplay': loading }">
+    <div class="btn-group justify-content-start operation col-12">
+          <button class="btn btn-success btn-sm" (click)="loadDocListBtn()" data-toggle="modal" data-target="#openFile"> <i class="fa fa-folder-open" aria-hidden="true"></i> Open</button>
+          <button class="btn btn-success btn-sm"  data-toggle="modal" data-target="#saveFile" (click)="fileNameToSave=''">
+          <i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button>
+          <button class="btn btn-success btn-sm"><i class="fa fa-plus-square" aria-hidden="true"></i> Export</button>
+    </div>
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="saveFile" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Save file</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <input type="text" class="form-control" placeholder="File name..." [(ngModel)]="fileNameToSave">
+        <div id="warnMsg" class="alert alert-danger" role="alert" *ngIf="checkFileExist()">
+          <strong>Warning!</strong> A file with the same name exists! You will overwrite the file.
+        </div>
 
-<div id="editor">
-  <p>Hello World!</p>
-  <p>Some initial <strong>bold</strong> text</p>
-  <p><br></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="saveDoc()" [disabled]="!fileNameToSave" >Save</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="openFile" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Open</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <ul class="list-group">
+            <li href="#openFile" class="list-group-item" *ngFor="let file of userDocs" >
+                <div class="fileName">
+                    <i class="doc-icon fa fa-file-text-o" aria-hidden="true"></i> 
+                    {{file.name}}
+                </div>
+               
+                <div class="ml-auto">
+                    <button class="btn btn-primary btn-sm" (click)="loadDoc(file.id)" data-dismiss="modal">Open</button>
+                    <button class="btn btn-danger btn-sm" (click)="deleteDoc(file.name)"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                </div>
+            </li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="editor-panel">
+    <div id="toolbar-container" [ngClass]="{'notDisplay': loading }" >
+        <span class="ql-formats">
+        <select class="ql-font"></select>
+        <select class="ql-size"></select>
+        </span>
+        <span class="ql-formats">
+        <button class="ql-bold"></button>
+        <button class="ql-italic"></button>
+        <button class="ql-underline"></button>
+        <button class="ql-strike"></button>
+        </span>
+        <span class="ql-formats">
+        <select class="ql-color"></select>
+        <select class="ql-background"></select>
+        </span>
+        <span class="ql-formats">
+        <button class="ql-script" value="sub"></button>
+        <button class="ql-script" value="super"></button>
+        </span>
+        <span class="ql-formats">
+        <button class="ql-header" value="1"></button>
+        <button class="ql-header" value="2"></button>
+        <button class="ql-blockquote"></button>
+
+        </span>
+        <span class="ql-formats">
+        <button class="ql-list" value="ordered"></button>
+        <button class="ql-list" value="bullet"></button>
+        <button class="ql-indent" value="-1"></button>
+        <button class="ql-indent" value="+1"></button>
+        </span>
+        <span class="ql-formats">
+        <button class="ql-direction" value="rtl"></button>
+        <select class="ql-align"></select>
+        </span>
+        <span class="ql-formats">
+        <button class="ql-link"></button>
+        <button class="ql-image"></button>
+        <button class="ql-video"></button>
+
+        </span>
+        <span class="ql-formats">
+        <button class="ql-clean"></button>
+        </span>
+    </div>
+
+
+    <div id="editor" [ngClass]="{'notDisplay': loading }">
+      <p>Hello World!</p>
+      <p><br></p>
+    </div>
 </div>

@@ -1,0 +1,24 @@
+
+@media (min-width : 540px) {
+    .editor {
+        width: calc(100vw - 380px);
+        margin-left: 30px;
+    }
+}
+
+@media (max-width : 539px) {
+    .editor {
+        width: calc(100vw - 50px);
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+
+    .chat {
+        display: none;
+    }
+}
+
+.main {
+  background: white;
+  border-radius: 10px;
+}

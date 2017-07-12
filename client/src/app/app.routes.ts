@@ -1,6 +1,7 @@
 import { Routes, RouterModule } from '@angular/router';
 import { MainComponent } from './components/main/main.component';
 import { StartComponent } from './components/start/start.component';
+import { AboutComponent } from './components/about/about.component';
 
 const route: Routes = [
 
@@ -19,18 +20,11 @@ const route: Routes = [
     component: MainComponent
 
   },
-  // {
-  //   path: 'problems/:id',
-  //   component: ProblemDetailComponent,
-  //   canActivate: ['auth-guard']
+  {
+    path: 'about',
+    component: AboutComponent
 
-  // },
-  // {
-  //   path: 'myprofile',
-  //   component: MyProfileComponent,
-  //   canActivate: ['auth-guard']
-
-  // },
+  },
   {
     path: '**',
     redirectTo: 'start'

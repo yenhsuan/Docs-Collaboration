@@ -1,0 +1,37 @@
+.start-btn {
+	margin: 10px;
+}
+
+
+#xx {
+	width: 100%;
+	height:calc(100vh - 55px);
+	background-color: #274666;
+}
+
+img {
+	width:100%;
+}
+
+.full {
+	height: calc( 100vh - 70px);
+}
+
+.mid {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  
+  transform: translate(-50%,-50%);
+}
+
+h2 {
+	margin:auto;
+	color:white;
+	width:300px;
+}
+
+.btnn {
+	margin: auto;
+	width: 150px;
+}

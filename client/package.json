@@ -23,6 +23,9 @@
     "@angular/router": "^4.0.0",
     "angular2-jwt": "^0.2.3",
     "core-js": "^2.4.1",
+    "js-sha512": "^0.4.0",
+    "ng-loading-bar": "0.0.8",
+    "ng2-toastr": "^4.1.2",
     "rxjs": "^5.1.0",
     "zone.js": "^0.8.4"
   },

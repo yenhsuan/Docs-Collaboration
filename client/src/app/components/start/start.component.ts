@@ -1,5 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { Router } from '@angular/router';
+import sha512 from 'js-sha512';
+
 
 @Component({
   selector: 'app-start',
@@ -7,8 +9,10 @@ import { Router } from '@angular/router';
   styleUrls: ['./start.component.css']
 })
 export class StartComponent implements OnInit {
-
+  loading = true;
+  sessionCode = '';
   constructor(@Inject('auth') private auth, @Inject('socket') private socket, private router: Router) { }
+
 
   ngOnInit() {
 
@@ -18,7 +22,30 @@ export class StartComponent implements OnInit {
       this.socket.setUserEmail('');
       this.socket.setUserPic('');
     }
+
+    if ( this.auth.authenticated()) {
+      this.auth.reloadProfile()
+        .then( (profile: any) => {
+          const userName = profile.username;
+          const userEmail = profile.email;
+          const userPic = profile.picture;
+
+          this.socket.setUserName(userName);
+          this.socket.setUserEmail(userEmail);
+          this.socket.setUserPic(userPic);
+          this.loading = false;
+        });
+    } else {
+      this.loading = false;
+    }
+
+
   }
+
+  authenticated() {
+    return this.auth.authenticated();
+  }
+
 
   login(): void {
   this.auth.login()
@@ -35,14 +62,21 @@ export class StartComponent implements OnInit {
     });
   }
 
+
+
   createNewDoc(): void {
-    this.socket.setSessionId('zzzzzzzzzzz');
+
+    const session = sha512( this.auth.getProfile().username + Math.random().toString(36).substr(2, 5) );
+    console.log(session);
+
+
+    this.socket.setSessionId(session);
     this.socket.userMode = 'create';
     this.router.navigate(['/main']);
   }
 
   joinSession(): void {
-    this.socket.setSessionId('zzzzzzzzzzz');
+    this.socket.setSessionId(this.sessionCode);
     this.socket.userMode = 'join';
     this.router.navigate(['/main']);
   }

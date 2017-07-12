@@ -1,17 +1,51 @@
   <div class="sideChat">
-  <ul class="list-group">
-    <li class="list-group-item" *ngFor="let userInfo of chatUserList">
+  
+  <div id="userlist">
+    <ul class="list-group">
+      <li class="list-group-item active">
+        User List
+        <div class="ml-auto">
+          <button class="btn-warning btn btn-sm " data-toggle="modal" data-target="#invite">
+            <i class="fa fa-plus" aria-hidden="true"></i> Invite
+          </button>
+        </div>
 
-    <img class="userAvatar rounded-circle" src = "http://www.expertosenecommerce.com/wp-content/uploads/2016/04/icon-user-default.jpg"> 
-    {{userInfo.userName}}
-    <div class="ml-auto"><i class="fa fa-envelope-open-o" aria-hidden="true"></i></div>
-    </li>
-  </ul>
 
+      </li>
+
+      <li class="list-group-item" *ngFor="let userInfo of chatUserList">
+
+      <img class="userAvatar rounded-circle" [src]="userInfo.userPic"> 
+      {{userInfo.userName}}
+      <div class="ml-auto"><i class="fa fa-envelope-open-o" aria-hidden="true"></i></div>
+      </li>
+    </ul>
+  </div>
+
+<!-- Modal -->
+  <div class="modal fade" id="invite" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Invite Code</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <textarea class="form-control" id="exampleTextarea" rows="5" [value]="getSessionId()" disabled></textarea>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- -->
 
 <div id="chat" class="card">
   <div class="chat-panel">
-  <div class="card-header card-primary card-inverse">Chat Panel</div>
+  <div class="card-header card-primary card-inverse"><i class="fa fa-commenting" aria-hidden="true"></i>  Chat Panel</div>
   <div class="card-block">
     <div #msg class="t" [scrollTop]="msg.scrollHeight">
         <div  *ngFor="let chatMsg of chatHistory"  >
@@ -31,13 +65,8 @@
     </div>
     <div class="card-footer">
         <div class = "row">
-            <div class="input-group col-4">
-            <div class="input-group-addon form-control-sm ">User</div>
-             <input type="text" class="form-control form-control-sm user" [(ngModel)]="userId">
-            </div>
-
-             <div class="input-group col-8">
-              <input type="text" class="form-control form-control-sm" [(ngModel)]="message">
+             <div class="input-group col-12">
+              <input type="text" class="form-control form-control-sm" [(ngModel)]="message" (keyup.enter)="sendMsg()">
               <span class="input-group-btn">
                 <button class="btn btn-primary btn-sm" type="button" (click)="sendMsg()">Send</button>
               </span>

@@ -2,6 +2,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
+import { NgLoadingBarModule } from 'ng-loading-bar';
+
 
 import { AppComponent } from './app.component';
 import { ChatComponent } from './components/chat/chat.component';
@@ -14,6 +16,9 @@ import { DocsService } from './services/docs.service';
 import { AuthService } from './services/auth.service';
 import { StartComponent } from './components/start/start.component';
 import { routing } from './app.routes';
+import { NavComponent } from './components/nav/nav.component';
+import { AboutComponent } from './components/about/about.component';
+
 
 @NgModule({
   declarations: [
@@ -21,13 +26,17 @@ import { routing } from './app.routes';
     ChatComponent,
     MainComponent,
     EditorComponent,
-    StartComponent
+    StartComponent,
+    NavComponent,
+    AboutComponent,
+
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule,
-    routing
+    routing,
+    NgLoadingBarModule.forRoot(),
   ],
   providers: [
     {

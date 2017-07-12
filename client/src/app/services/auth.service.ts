@@ -12,8 +12,8 @@ declare var Auth0Lock: any;
 
 const options = {
   theme: {
-    // logo: '../../assets/mylogo.png',
-    primaryColor: '#2b2b2b'
+    logo: '../../assets/google-docs.png',
+    primaryColor: '#337ab7'
   },
   languageDictionary: {
     title: 'Log in'
@@ -38,6 +38,7 @@ export class AuthService {
   domain = 'terryccc.auth0.com';
   lock = new Auth0Lock(this.clientId, this.domain, options);
   profile: any;
+  accessToken = '';
 
   // nickname = new BehaviorSubject<string>('');
 
@@ -58,6 +59,7 @@ export class AuthService {
             }
             localStorage.setItem('accessToken', authResult.accessToken);
             localStorage.setItem('id_token', authResult.idToken);
+            this.accessToken = authResult.accessToken;
             localStorage.setItem('profile', JSON.stringify(profile));
             this.profile = profile;
             // console.log('here');
@@ -72,19 +74,29 @@ export class AuthService {
   }
 
 
- //  public getNickName() {
- //    return this.nickname.asObservable();
- //  }
-
- // public sendNickName(nick:string):void {
- //    this.nickname.next(nick);
- //  }
-
   public authenticated() {
 
     // const expiresAt = JSON.parse(localStorage.getItem('expires_at'));
     // return localStorage.getItem('profile') && new Date().getTime() < expiresAt;
     return tokenNotExpired('id_token');
+  }
+
+  public reloadProfile() {
+    const accessToken: string = localStorage.getItem('accessToken');
+    return new Promise ( (resolve, reject) => {
+      this.lock.getUserInfo( accessToken, (error, profile) => {
+        if (error) {
+          console.log(error);
+          return;
+        }
+        localStorage.setItem('profile', JSON.stringify(profile));
+        this.profile = profile;
+
+        // console.log('here');
+        resolve(profile);
+        // this.router.navigate(['/ugihuih']);
+     });
+    });
   }
 
   public logout() {
@@ -97,7 +109,7 @@ export class AuthService {
   }
 
   public getProfile(): Object {
-    return JSON.parse(localStorage.getItem('profile'));
+    return this.profile;
   }
 
 

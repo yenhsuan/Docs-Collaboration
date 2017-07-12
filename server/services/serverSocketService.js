@@ -28,6 +28,7 @@ module.exports = (io) => {
         // Listen clients create sessions
 
         socket.on('clientCreateSession', (setting) => {
+            socket.emit('serverSendNoSession','true');
             let settingObj = JSON.parse(setting);
             userInfoMap[socket.id]['sessionId'] = settingObj['sessionId'];
 
@@ -73,6 +74,7 @@ module.exports = (io) => {
 
         socket.on('clientJoinSession', (sessionId) => {
             if (sessionIdList[sessionId]) {
+                socket.emit('serverSendNoSession','true');
                 sessionIdList[sessionId]['users'].push(socket.id);
                 userInfoMap[socket.id].sessionId = sessionId;
 
@@ -98,6 +100,7 @@ module.exports = (io) => {
             }
             else {
                 console.log('[!] ERROR: SessionId was not created');
+                socket.emit('serverSendNoSession','false');
             }
         });
 

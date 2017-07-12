@@ -1,0 +1,21 @@
+.operation {
+	/*margin: auto;
+	*/margin-top:15px;
+	margin-bottom: 10px;
+}
+
+.doc-icon {
+	margin-right: 15px;
+}
+
+#warnMsg {
+	margin-top: 10px;
+}
+
+.notDisplay {
+	display: none;
+}
+
+#editor-panel {
+	height:500px;
+}

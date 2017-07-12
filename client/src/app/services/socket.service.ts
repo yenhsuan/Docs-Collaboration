@@ -18,6 +18,7 @@ export class SocketService {
   sessionId: string;
   chatMsgReceived = new BehaviorSubject<string>('');
   userListReceived = new BehaviorSubject<string>('');
+  sessionLegal = new BehaviorSubject<boolean>(true);
 
   userMode = '';
 
@@ -28,9 +29,12 @@ export class SocketService {
   socketInit() {
     // console.log(window.location.origin);
     if (this.userName) {
+      this.userPic = encodeURIComponent(this.userPic);
+      console.log(this.userPic);
       this.socket = io('localhost:3000', {query: `userName=${this.userName}&userEmail=${this.userEmail}&userPic=${this.userPic}`});
       this.socketListenChat();
       this.socketListenUserList();
+      this.socketListenSessionLegal();
 
     }
     console.log('[*] socketInit... done');
@@ -56,6 +60,10 @@ export class SocketService {
     return this.userListReceived.asObservable();
   }
 
+  subscribeSessionLegal(): Observable<boolean> {
+    return this.sessionLegal.asObservable();
+  }
+
 
   socketListenUserList(): void {
     this.socket.on('serverSendUsersList', (userListString) => {
@@ -70,6 +78,19 @@ export class SocketService {
       this.chatMsgReceived.next(msg);
     });
   }
+
+  socketListenSessionLegal(): void {
+    this.socket.on('serverSendNoSession', (msg: string) => {
+      console.log('[v] Message received: ' + msg);
+      if ( msg === 'false') {
+        this.sessionLegal.next(false);
+      } 
+      
+      this.sessionLegal.next(true);
+
+    });
+  }
+
 
   socketSendMsgChat(msg: string): void {
     const msgObj: object = {

@@ -17,11 +17,12 @@ export class ChatComponent implements OnInit {
   chatUserList: Array<object> = [];
   chatUserListSubscribed: Subscription;
 
-  constructor(@Inject('socket') private socket) {
+  constructor(@Inject('socket') private socket, @Inject('auth') private auth) {
 
   }
 
   ngOnInit() {
+    this.userId = this.auth.getProfile().username;
     this.chatNewMsgSubscribed = this.socket.subscribeNewChatMsg()
       .subscribe( (newMsg: string) => {
         if (newMsg) {
@@ -46,6 +47,12 @@ export class ChatComponent implements OnInit {
     if (this.message !== '') {
       this.socket.socketSendMsgChat(this.message);
     }
+    this.message = '';
   }
+
+  getSessionId() {
+    return this.socket.getSessionId();
+  }
+
 }
 //

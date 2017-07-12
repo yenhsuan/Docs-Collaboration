@@ -13,7 +13,7 @@
 }
 
 .card-header { 
-  background-color: #3d6da7 !important;
+  
   color: white !important; 
   padding: 2px;
   text-align: center;
@@ -30,7 +30,7 @@ input {
 
 .t {
   height: 250px !important;
-  background-color: #F5F5F5; 
+  background-color: #FcFcFc; 
   overflow-y: auto;
   padding-bottom: 10px;
   padding-top: 10px;
@@ -44,7 +44,7 @@ input {
 
 .msgText {
   position: relative;
-  margin-left: 45px;
+  margin-left: 30px;
   margin-right: 10px;
   word-wrap: break-word;
   padding-left: 10px;
@@ -66,7 +66,7 @@ input {
   top: 50%;
   width: 0;
   height: 0;
-  border: 20px solid transparent;
+  border: 0px solid transparent;
   border-right-color: #ffffff;
   border-left: 0;
   border-bottom: 0;
@@ -79,7 +79,7 @@ input {
 .msgText-me {
   position: relative;
   margin-left: 10px;
-  margin-right: 45px;
+  margin-right: 35px;
   word-wrap: break-word;
   padding-left: 10px;
   margin-top: 2px;
@@ -98,32 +98,41 @@ input {
   content: '';
   position: absolute;
   right: 0;
-  top: 50%;
+  top: 40%;
   width: 0;
   height: 0;
-  border: 20px solid transparent;
+  border: 8px solid transparent;
   border-left-color: #0084ff;
   border-right: 0;
   border-bottom: 0;
-  margin-top: -10px;
-  margin-right: -20px;
-
+  margin-top: -4px;
+  margin-right: -8px;
 }
 
 #chat {
   position: fixed;
   bottom: 10px;
+  right: 5px;
   width:300px;
 }
 
-#tester {
-  height:5000px;
-  background-color: green;
+#userlist {
+  position: fixed;
+  top: 70px;
+  right: 5px;
+  width:300px;
+  height:300px;
+  overflow-y: auto;
+  flex-grow:1;
 }
 
 .userAvatar {
   width: 20px;
   height: 20px;
   margin-right: 10px;
+}
+
+#session-id {
+  overflow-x: auto;
 }
 
