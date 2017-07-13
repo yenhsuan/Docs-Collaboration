@@ -31,7 +31,7 @@ export class SocketService {
     if (this.userName) {
       this.userPic = encodeURIComponent(this.userPic);
       console.log(this.userPic);
-      this.socket = io('localhost:5566', {query: `userName=${this.userName}&userEmail=${this.userEmail}&userPic=${this.userPic}`});
+      this.socket = io('/', {query: `userName=${this.userName}&userEmail=${this.userEmail}&userPic=${this.userPic}`});
       this.socketListenChat();
       this.socketListenUserList();
       this.socketListenSessionLegal();
