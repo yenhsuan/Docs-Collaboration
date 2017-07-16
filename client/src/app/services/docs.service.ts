@@ -44,7 +44,7 @@ export class DocsService {
 
   deleteDoc(uid: string, name: string): Promise<any> {
 
-    return this.httpObj.delete(`http://localhost:5566/api/v1/deletefile/${uid}/${name}`)
+    return this.httpObj.delete(`/api/v1/deletefile/${uid}/${name}`)
               .toPromise()
               .then( (response: Response) => {
                 console.log(response.json());
