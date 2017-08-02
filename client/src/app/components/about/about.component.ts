@@ -11,11 +11,8 @@ export class AboutComponent implements OnInit {
 
   ngOnInit() {
 
-    if ( this.auth.authenticated()) {
-      this.auth.reloadProfile()
-        .then( (profile: any) => {
-
-        });
+    if ( !this.auth.profile && this.auth.loadingProfile === false && this.auth.authenticated()) {
+      this.auth.reloadProfile();
     }
   }
 }

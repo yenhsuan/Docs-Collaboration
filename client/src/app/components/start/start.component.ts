@@ -21,7 +21,7 @@ export class StartComponent implements OnInit {
       this.socket.setUserPic('');
     }
 
-    if ( this.auth.authenticated()) {
+    if ( !this.auth.profile && this.auth.loadingProfile === false && this.auth.authenticated()) {
       this.auth.reloadProfile();
     }
   }

@@ -98,6 +98,7 @@ export class AuthService {
         this.loadingProfile = false;
         if (error) {
           console.log(error);
+          this.logout();
           return;
         }
         localStorage.setItem('profile', JSON.stringify(profile));
