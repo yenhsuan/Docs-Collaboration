@@ -1,20 +1,6 @@
-#page {
-    width:100%;
-    margin: 0;
-    background: #274666;
-    height: calc(100vh - 55px);
-    overflow: auto;
-    max-height: 100vh;
+.main {
+  margin-top: 45px;
 }
-
-.jumbotron {
-  position: absolute;
-  top: 80px;
-  left: 50%;
-  
-  transform: translate(-50%,0);
-}
-
 .git {
     margin-right: 10px;
 }

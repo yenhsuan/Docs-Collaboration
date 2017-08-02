@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { NgLoadingBarModule } from 'ng-loading-bar';
+import { NgClass } from '@angular/common';
 
 
 import { AppComponent } from './app.component';
